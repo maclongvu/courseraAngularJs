@@ -1,0 +1,12 @@
+<h3>Found:</h3>
+<div class="row" ng-repeat="item in list.items">
+  <div class="col-sm-8">
+    <h4>{{ item.name }}</h4>
+    <p>{{ item.description }}</p>
+  </div>
+  <div class="col-sm-4">
+    <button ng-click="list.onRemove({index: $index});">Remove Item</button>
+    <!-- <button ng-click="menu.onRemove($index);">Remove Item</button> -->
+  </div>
+</div>
+<div class="error" ng-if="list.noItemFound()">Nothing found</div>
