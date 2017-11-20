@@ -1,7 +1,7 @@
 (function () {
 'use strict';
 
-angular.module('ShoppingList')
+angular.module('MenuApp')
 .config(RoutesConfig);
 
 RoutesConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
@@ -16,25 +16,37 @@ function RoutesConfig($stateProvider, $urlRouterProvider) {
   // Home page
   .state('home', {
     url: '/',
-    templateUrl: 'src/shoppinglist/templates/home.template.html'
+    templateUrl: 'src/menuapp/templates/home.template.html'
   })
 
   // Premade list page
-  .state('mainList', {
-    url: '/main-list',
-    templateUrl: 'src/shoppinglist/templates/main-shoppinglist.template.html',
-    controller: 'MainShoppingListController as mainList',
+  .state('categories', {
+    url: '/categories',
+    templateUrl: 'src/menuapp/templates/main-categories.template.html',
+    controller: 'CategoriesController as menu',
     resolve: {
-      items: ['ShoppingListService', function (ShoppingListService) {
-        return ShoppingListService.getItems();
+      items: ['MenuDataService', function (MenuDataService) {
+        return MenuDataService.getAllCategories();
       }]
     }
   })
 
-  .state('mainList.itemDetail', {
-    url: '/item-detail/{itemId}',
-    templateUrl: 'src/shoppinglist/templates/item-detail.template.html',
+  .state('categories.itemDetail', {
+    url: '/categories/{itemId}',
+    templateUrl: 'src/menuapp/templates/item-detail.template.html',
     controller: "ItemDetailController as itemDetail"
+  })
+
+  .state('items', {
+    url: '/item-details/{short_name}',
+    templateUrl: 'src/menuapp/templates/main-items.template.html',
+    controller: 'ItemsController as catItems',
+    resolve: {
+      item: ['$stateParams', 'MenuDataService',
+            function ($stateParams, MenuDataService) {
+              return MenuDataService.getItemsForCategory($stateParams.short_name);
+            }]
+    }
   });
 
 }
